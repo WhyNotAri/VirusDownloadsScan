@@ -6,6 +6,8 @@ __pycache__/
 # Packaging and build artifacts
 build/
 dist/
+.eggs/
+*.egg
 *.egg-info/
 pip-wheel-metadata/
 
@@ -21,11 +23,15 @@ env/
 *.local
 .python-version
 
-# Test and coverage outputs
+# Test and coverage outputs (keep tests/ itself committed)
 .pytest_cache/
+.hypothesis/
+.tox/
+.nox/
 .coverage
 .coverage.*
 htmlcov/
+coverage.xml
 
 # Type checker / linter caches
 .mypy_cache/

@@ -11,7 +11,7 @@ Using the VirusTotal API to scan files for malware and other threats.
 ## Tech Stack
 
 - VirusTotal API
-- Python 3.14
+- Python 3.12
 - Python Packages: 
   - python-dotenv
   - requests
