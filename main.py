@@ -6,6 +6,7 @@ from watchdog.events import FileSystemEventHandler
 from scanner import scan_file
 from config import downloads_path
 from logger import setup_logging
+from file import finished_downloading
 
 setup_logging()
 
@@ -13,9 +14,7 @@ def process_file(route):
     if any(route.endswith(extension) for extension in ['.download', '.part', '.tmp']):
         return None
 
-    time.sleep(5)
-
-    if os.path.exists(route):
+    if finished_downloading(route):
         return scan_file(route)
 
     return None
@@ -30,7 +29,7 @@ class Handler(FileSystemEventHandler):
             logging.warning(f"File: {os.path.basename(route)} already scanned, the results were:\n{self.route_results[route]}")
             return self.route_results[route]
         else:
-            logging.info(f"Scanning -> {os.path.basename(route)} <-")
+            logging.info(f"Scanning... '{os.path.basename(route)}'")
             result = process_file(route)
             self.route_results[route] = result
 

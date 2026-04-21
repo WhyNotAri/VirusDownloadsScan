@@ -4,11 +4,16 @@ import os
 import requests
 import logging
 from config import api_key
+from file import is_heavy_download
 
 headers = {"x-apikey": api_key}
 
 def calculate_hash(file_path):
+    if is_heavy_download(file_path):
+        logging.error("File is too heavy")
+        return None
     if not os.path.exists(file_path):
+        logging.error(f"File not found: {file_path}")
         return None
 
     sha256_hash = hashlib.sha256()
@@ -71,8 +76,6 @@ def upload_file(file_path):
         return None
 
 def scan_file(path):
-    logging.info(f"Scanning...")
-
     hash_file = calculate_hash(path)
     result = consult_hash(hash_file)
 
@@ -87,5 +90,9 @@ def scan_file(path):
         logging.info(f"Upload status: {status}")
         return {"upload_status": status}
 
-    logging.info(f"Result: {result}")
+    if result.get("status") == 200 and result.get("found"):
+        logging.info(f"Result: {result}")
+    else:
+        logging.error(f"Result: {result}")
+
     return result
